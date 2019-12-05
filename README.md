@@ -8,7 +8,6 @@ Use virtio-net for host-only adapter in VirtualBox
 vagrant up
 ```
 
-
 ### Copy keys
 ```
 scp -i /Users/dsakuma/projects/work/safeguard/dev-vm/.vagrant/machines/default/virtualbox/private_key ~/.ssh/* vagrant@192.168.33.10:/home/vagrant/.ssh/
@@ -20,51 +19,12 @@ vagrant uplaod ~/.ssh/* /home/vagrant./ssh/
 
 ## Guest
 
-### Install docker
-```
-curl -fsSL https://get.docker.com | s
-```
-
-```
-sudo usermod -aG docker vagrant
-```
-
-### Install docker-compose
-```
-sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-````
-
-### Start nginx-proxy
-```
-docker run -d -t -p 80:80 --restart=always --volume /var/run/docker.sock:/tmp/docker.sock:ro --name=nginx-domain-proxy jwilder/nginx-proxy
-```
-
-### Install zsh and oh-my-zsh
-```
-apt-update && apt install zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-### Install homesick and clone castle
-```
-apt install ruby
-gem install homesick
-homesick clone dsakuma/dev-vm-dotfiles
-```
-
 ### Add to ~/.ssh/config
 
 ```
 Host *
   AddKeysToAgent yes
 ```
-
-### enable-linger
-```
-loginctl enable-linger vagrant
-```
-
 
 ## Development options:
 
