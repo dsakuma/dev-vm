@@ -53,6 +53,19 @@ gem install homesick
 homesick clone dsakuma/dev-vm-dotfiles
 ```
 
+### Add to ~/.ssh/config
+
+```
+Host *
+  AddKeysToAgent yes
+```
+
+### enable-linger
+```
+loginctl enable-linger vagrant
+```
+
+
 ## Development options:
 
 - Use remote-ssh plugin on vscode
