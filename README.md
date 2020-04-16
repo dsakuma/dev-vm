@@ -9,12 +9,17 @@ vagrant up
 ```
 
 ### Copy keys
+
+From dev-vm project folder:
+
 ```
-scp -i /Users/dsakuma/projects/work/safeguard/dev-vm/.vagrant/machines/default/virtualbox/private_key ~/.ssh/* vagrant@192.168.33.10:/home/vagrant/.ssh/
+scp -r -i .vagrant/machines/default/virtualbox/private_key ~/.aws vagrant@192.168.33.10:/home/vagrant/.aws
+scp -r -i .vagrant/machines/default/virtualbox/private_key ~/.aws vagrant@192.168.33.10:/home/vagrant/.aws
 ```
 or
 ```
-vagrant uplaod ~/.ssh/* /home/vagrant./ssh/
+vagrant uplaod ~/.ssh/* /home/vagrant/.ssh/
+vagrant upload ~/.aws/* /home/vagrant/.aws/
 ```
 
 ## Guest

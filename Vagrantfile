@@ -64,15 +64,18 @@ Vagrant.configure("2") do |config|
   config.disksize.size = '30GB'
 
   config.vm.provision "shell", privileged: false, inline: <<-SCRIPT
-    curl -fsSL https://get.docker.com | sh
+    [[ -f /usr/bin/docker ]] ||
+      curl -fsSL https://get.docker.com | sh
     sudo usermod -aG docker vagrant
-    [[ -f /usr/local/bin/docker-compmose ]] ||
+    [[ -f /usr/local/bin/docker-compose ]] ||
       sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
-    apt-update && apt install -y zsh ruby homesick
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sudo apt-get update && sudo apt-get install -y zsh ruby homesick awscli
+    [[ -d /home/vagrant/.oh-my-zsh ]] ||
+      sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     homesick clone dsakuma/dotfiles
     loginctl enable-linger vagrant
     sudo chsh vagrant --shell /bin/zsh
   SCRIPT
+
 end
