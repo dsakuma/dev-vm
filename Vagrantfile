@@ -77,6 +77,10 @@ Vagrant.configure("2") do |config|
     loginctl enable-linger vagrant
     sudo chsh vagrant --shell /bin/zsh
     sudo gem install rubocop --version='~>0.42.0'
+    [[ -f ~/.vim/autoload/plug.vim ]] ||
+      curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    vim +PlugInstall +qall
   SCRIPT
 
 end
