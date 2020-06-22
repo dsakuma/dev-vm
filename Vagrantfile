@@ -64,24 +64,33 @@ Vagrant.configure("2") do |config|
   config.disksize.size = '30GB'
 
   config.vm.provision "shell", privileged: false, inline: <<-SCRIPT
+    # Install docker
     [[ -f /usr/bin/docker ]] ||
       curl -fsSL https://get.docker.com | sh
     sudo usermod -aG docker vagrant
+    # Install docker-compose
     [[ -f /usr/local/bin/docker-compose ]] ||
       sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
+    # Install dependencies
     sudo apt-get update && sudo apt-get install -y \
 	awscli \
-        homesick \
         silversearcher-ag \
         ruby ruby-dev \
         zsh
+    # Install oh-my-zsh
     [[ -d /home/vagrant/.oh-my-zsh ]] ||
       sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    homesick clone dsakuma/dotfiles
+    # Install gems
+    gem install --user-install homesick
+    gem install --user-install rubocop --version='~>0.42.0'
+    # Clone homesick castle (using complete path, since .zshrc is not linked yet)
+    $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
+    # Setting for ssh-agent
     loginctl enable-linger vagrant
+    # Use zsh as default shell
     sudo chsh vagrant --shell /bin/zsh
-    sudo gem install rubocop --version='~>0.42.0'
+    # Install vim-plug and plugins
     [[ -f ~/.vim/autoload/plug.vim ]] ||
       curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
