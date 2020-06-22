@@ -70,7 +70,12 @@ Vagrant.configure("2") do |config|
     [[ -f /usr/local/bin/docker-compose ]] ||
       sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
-    sudo apt-get update && sudo apt-get install -y awscli homesick ruby ruby-dev zsh
+    sudo apt-get update && sudo apt-get install -y \
+	awscli \
+        homesick \
+        silversearcher-ag \
+        ruby ruby-dev \
+        zsh
     [[ -d /home/vagrant/.oh-my-zsh ]] ||
       sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     homesick clone dsakuma/dotfiles
