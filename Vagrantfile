@@ -47,8 +47,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.name = "Dev-vm"
-    vb.cpus = 2
-    vb.memory = "4096"
+    vb.cpus = 1
+    vb.memory = "3072"
   end
 
   # Enable provisioning with a shell script. Additional provisioners such as
@@ -74,9 +74,14 @@ Vagrant.configure("2") do |config|
     sudo chmod +x /usr/local/bin/docker-compose
     # Install dependencies
     sudo apt-get update && sudo apt-get install -y \
-	awscli \
+       	awscli \
+        build-essential \
+        cmake \ 
+        python3 \
+        python3.6-dev \
         silversearcher-ag \
-        ruby ruby-dev \
+        ruby \
+        ruby-dev \
         zsh
     # Install oh-my-zsh
     [[ -d /home/vagrant/.oh-my-zsh ]] ||
