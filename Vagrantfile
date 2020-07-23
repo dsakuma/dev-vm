@@ -82,6 +82,12 @@ Vagrant.configure("2") do |config|
           silversearcher-ag \
           zsh
 
+      # Upgrade packages
+      sudo apt upgrade -y
+
+      # Install asdf
+      git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+
       # Install oh-my-zsh
       [[ -d /home/vagrant/.oh-my-zsh ]] ||
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -93,9 +99,9 @@ Vagrant.configure("2") do |config|
       # Clone homesick castle (using complete path, since .zshrc is not linked yet)
       $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
       $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
-
-      # Setting for ssh-agent
-      # loginctl enable-linger vagrant
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick pull
+      git --git-dir=/home/vagrant/.homesick/repos/dotfiles remote remove origin
+      git --git-dir=/home/vagrant/.homesick/repos/dotfiles remote add origin git@github.com:dsakuma/dotfiles.git
 
       # Use zsh as default shell
       sudo chsh vagrant --shell /bin/zsh
