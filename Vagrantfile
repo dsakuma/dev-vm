@@ -60,6 +60,23 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
+      #####################
+      ### Link homesick ###
+      #####################
+
+      # Install ruby
+      sudo apt-get update && sudo apt-get install -y ruby
+
+      # Install homesick
+      gem install --user-install homesick
+
+      # Clone homesick castle (using complete path, since .zshrc is not linked yet)
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick pull
+      git --git-dir=~/.homesick/repos/dotfiles remote remove origin
+      git --git-dir=~/.homesick/repos/dotfiles remote add origin git@github.com:dsakuma/dotfiles.git
+
       ########################
       ### Install packages ###
       ########################
@@ -75,11 +92,10 @@ Vagrant.configure("2") do |config|
       sudo chmod +x /usr/local/bin/docker-compose
 
       # Install dependencies
-      sudo apt-get update && sudo apt-get install -y \
+      sudo apt-get install -y \
           autojump \
           awscli \
           build-essential \
-          ruby \
           ruby-dev \
           silversearcher-ag \
           tig \
@@ -92,8 +108,7 @@ Vagrant.configure("2") do |config|
       [[ -d /home/vagrant/.oh-my-zsh ]] ||
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-      # Install gems
-      gem install --user-install homesick
+      # Install rubocop
       gem install --user-install rubocop --version='~>0.42.0'
 
       # Install vim-plug
@@ -101,23 +116,14 @@ Vagrant.configure("2") do |config|
         curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-      #####################
-      ### Link homesick ###
-      #####################
-      
-      # Clone homesick castle (using complete path, since .zshrc is not linked yet)
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick pull
-      git --git-dir=~/.homesick/repos/dotfiles remote remove origin
-      git --git-dir=~/.homesick/repos/dotfiles remote add origin git@github.com:dsakuma/dotfiles.git
-
+      # Install asdf
+      git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+ 
       ##############################################
       ### Install packages depending on dotfiles ###
       ##############################################
  
-      # Install asdf and plugins
-      git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+      # Install asdf plugins
       asdf install
 
       # Install vim plugins
@@ -138,4 +144,7 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = %w(vagrant-disksize)
   # Increase disk size
   config.disksize.size = '40GB'
+
+
+
 end
