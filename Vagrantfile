@@ -59,6 +59,8 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
+  config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "$HOME/.ssh/id_rsa"
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "$HOME/.ssh/id_rsa.pub"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
       #####################
       ### Link homesick ###
@@ -66,16 +68,16 @@ Vagrant.configure("2") do |config|
 
       # Install ruby
       sudo apt-get update && sudo apt-get install -y ruby
+      export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
       # Install homesick
       gem install --user-install homesick
 
       # Clone homesick castle (using complete path, since .zshrc is not linked yet)
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick pull
-      git --git-dir=~/.homesick/repos/dotfiles remote remove origin
-      git --git-dir=~/.homesick/repos/dotfiles remote add origin git@github.com:dsakuma/dotfiles.git
+      homesick clone dsakuma/dotfiles
+      homesick link dotfiles
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
 
       ########################
       ### Install packages ###
@@ -102,7 +104,7 @@ Vagrant.configure("2") do |config|
           zsh
 
       # Upgrade packages
-      sudo apt upgrade -y
+      sudo apt-get upgrade -y
 
       # Install oh-my-zsh
       [[ -d /home/vagrant/.oh-my-zsh ]] ||
@@ -117,17 +119,23 @@ Vagrant.configure("2") do |config|
           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
       # Install asdf
-      git clone https://github.com/asdf-vm/asdf.git ~/.asdf
- 
+      [[ -d ~/.asdf ]] ||
+        git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+      . $HOME/.asdf/asdf.sh
+
+      # Install asdf plugins
+      asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+      bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+
       ##############################################
       ### Install packages depending on dotfiles ###
       ##############################################
- 
-      # Install asdf plugins
+
+      # Install asdf versions
       asdf install
 
       # Install vim plugins
-      vim +PlugInstall +qall
+      vim +PlugInstall +qall > /dev/null
       
       ################################
       ### Set zsh as default shell ###
@@ -144,7 +152,4 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = %w(vagrant-disksize)
   # Increase disk size
   config.disksize.size = '40GB'
-
-
-
 end
