@@ -61,6 +61,7 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "$HOME/.ssh/id_rsa"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "$HOME/.ssh/id_rsa.pub"
+  config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
       #####################
       ### Link homesick ###
@@ -101,6 +102,7 @@ Vagrant.configure("2") do |config|
           ruby-dev \
           silversearcher-ag \
           tig \
+          zlib1g-dev \
           zsh
 
       # Upgrade packages
@@ -123,10 +125,19 @@ Vagrant.configure("2") do |config|
         git clone https://github.com/asdf-vm/asdf.git ~/.asdf
       . $HOME/.asdf/asdf.sh
 
-      # Install asdf plugins
+      # Install asdf nodejs plugin
       asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
       bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
 
+      # Install asdf python plugin
+      asdf plugin-add python
+
+      # Install beanstalk-shell
+      [[ -f /usr/local/bin/beanstalk-shell ]] ||
+        git clone git@github.com:Vizir/beanstalk-shell.git &&
+          sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/. &&
+          rm -rf beanstalk-shell
+      
       ##############################################
       ### Install packages depending on dotfiles ###
       ##############################################
