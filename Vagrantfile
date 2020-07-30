@@ -144,6 +144,9 @@ Vagrant.configure("2") do |config|
 
       # Install asdf versions
       asdf install
+     
+      # Install pip packages 
+      pip install boto3
 
       # Install vim plugins
       vim +PlugInstall +qall > /dev/null
