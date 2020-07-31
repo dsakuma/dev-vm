@@ -137,6 +137,9 @@ Vagrant.configure("2") do |config|
         git clone git@github.com:Vizir/beanstalk-shell.git &&
           sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/. &&
           rm -rf beanstalk-shell
+
+      # Upgrade pip
+      pip install --upgrade pip
       
       ##############################################
       ### Install packages depending on dotfiles ###
@@ -150,6 +153,9 @@ Vagrant.configure("2") do |config|
 
       # Install vim plugins
       vim +PlugInstall +qall > /dev/null
+
+      # Install vim Coc extensions
+      vim +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
       
       ################################
       ### Set zsh as default shell ###
