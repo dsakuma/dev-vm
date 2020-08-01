@@ -112,8 +112,9 @@ Vagrant.configure("2") do |config|
       [[ -d /home/vagrant/.oh-my-zsh ]] ||
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-      # Install rubocop
+      # Install gems
       gem install --user-install rubocop --version='~>0.42.0'
+      gem install --user-install solargraph
 
       # Install vim-plug
       [[ -f ~/.vim/autoload/plug.vim ]] ||
