@@ -158,10 +158,10 @@ Vagrant.configure("2") do |config|
       pip install boto3
 
       # Install vim plugins
-      # vim +PlugInstall +qall > /dev/null
+      vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
 
       # Install vim Coc extensions
-      # vim +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
+      vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
       
       ################################
       ### Set zsh as default shell ###
