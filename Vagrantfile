@@ -99,6 +99,7 @@ Vagrant.configure("2") do |config|
           autojump \
           awscli \
           build-essential \
+          libssl-dev \
           ruby-dev \
           silversearcher-ag \
           tig \
@@ -109,8 +110,11 @@ Vagrant.configure("2") do |config|
       sudo apt-get upgrade -y
 
       # Install oh-my-zsh
-      [[ -d /home/vagrant/.oh-my-zsh ]] ||
+      if [[ ! -d /home/vagrant/.oh-my-zsh ]]; then
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        rm -f ~/.zshrc
+        mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
+      fi
 
       # Install gems
       gem install --user-install rubocop --version='~>0.42.0'
@@ -134,13 +138,11 @@ Vagrant.configure("2") do |config|
       asdf plugin-add python
 
       # Install beanstalk-shell
-      [[ -f /usr/local/bin/beanstalk-shell ]] ||
-        git clone git@github.com:Vizir/beanstalk-shell.git &&
-          sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/. &&
-          rm -rf beanstalk-shell
-
-      # Upgrade pip
-      pip install --upgrade pip
+      #if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
+      #  GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
+      #  sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
+      #  rm -rf beanstalk-shell
+      #fi
       
       ##############################################
       ### Install packages depending on dotfiles ###
@@ -149,14 +151,17 @@ Vagrant.configure("2") do |config|
       # Install asdf versions
       asdf install
      
+      # Upgrade pip
+      pip install --upgrade pip
+
       # Install pip packages 
       pip install boto3
 
       # Install vim plugins
-      vim +PlugInstall +qall > /dev/null
+      # vim +PlugInstall +qall > /dev/null
 
       # Install vim Coc extensions
-      vim +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
+      # vim +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
       
       ################################
       ### Set zsh as default shell ###
