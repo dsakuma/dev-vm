@@ -62,6 +62,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "$HOME/.ssh/id_rsa"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "$HOME/.ssh/id_rsa.pub"
   config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
+  config.vm.provision "file", source: "~/.aws", destination: "$HOME/.aws"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
       #####################
       ### Link homesick ###
