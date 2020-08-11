@@ -127,7 +127,10 @@ Vagrant.configure("2") do |config|
       [[ -d ~/.asdf ]] ||
         git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
-      # Install beanstalk-shell
+      # Install pip packages 
+      pip3 install boto3
+
+     # Install beanstalk-shell
       #if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
       #  GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
       #  sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
@@ -137,9 +140,6 @@ Vagrant.configure("2") do |config|
       ##############################################
       ### Install packages depending on dotfiles ###
       ##############################################
-
-      # Install pip packages 
-      pip3 install boto3
 
       # Install vim plugins
       vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
