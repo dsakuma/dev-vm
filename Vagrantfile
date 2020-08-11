@@ -80,6 +80,7 @@ Vagrant.configure("2") do |config|
       homesick link dotfiles
       git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
       git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git branch --set-upstream-to=origin/master master
 
       ########################
       ### Install packages ###
