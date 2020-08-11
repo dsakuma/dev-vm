@@ -100,15 +100,12 @@ Vagrant.configure("2") do |config|
           autojump \
           awscli \
           build-essential \
-          libssl-dev \
+          nodejs \
+          python3-pip \
           ruby-dev \
           silversearcher-ag \
           tig \
-          zlib1g-dev \
           zsh
-
-      # Upgrade packages
-      sudo apt-get upgrade -y
 
       # Install oh-my-zsh
       if [[ ! -d /home/vagrant/.oh-my-zsh ]]; then
@@ -129,14 +126,6 @@ Vagrant.configure("2") do |config|
       # Install asdf
       [[ -d ~/.asdf ]] ||
         git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-      . $HOME/.asdf/asdf.sh
-
-      # Install asdf nodejs plugin
-      asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-      bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
-
-      # Install asdf python plugin
-      asdf plugin-add python
 
       # Install beanstalk-shell
       #if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
@@ -149,14 +138,8 @@ Vagrant.configure("2") do |config|
       ### Install packages depending on dotfiles ###
       ##############################################
 
-      # Install asdf versions
-      asdf install
-     
-      # Upgrade pip
-      pip install --upgrade pip
-
       # Install pip packages 
-      pip install boto3
+      pip3 install boto3
 
       # Install vim plugins
       vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
@@ -176,7 +159,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "dev-vm"
 
   # Vagrant plugins
-  config.vagrant.plugins = %w(vagrant-disksize)
+  # config.vagrant.plugins = %w(vagrant-disksize)
   # Increase disk size
-  config.disksize.size = '40GB'
+  # config.disksize.size = '40GB'
 end
