@@ -78,6 +78,8 @@ Vagrant.configure("2") do |config|
       # Clone homesick castle (using complete path, since .zshrc is not linked yet)
       homesick clone dsakuma/dotfiles
       homesick link dotfiles
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
 
       ########################
       ### Install packages ###
