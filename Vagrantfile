@@ -101,6 +101,7 @@ Vagrant.configure("2") do |config|
           awscli \
           build-essential \
           nodejs \
+          npm \
           python3-pip \
           ruby-dev \
           silversearcher-ag \
@@ -130,12 +131,12 @@ Vagrant.configure("2") do |config|
       # Install pip packages 
       pip3 install boto3
 
-     # Install beanstalk-shell
-      #if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
-      #  GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
-      #  sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
-      #  rm -rf beanstalk-shell
-      #fi
+      # Install beanstalk-shell
+      # if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
+      #   GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
+      #   sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
+      #   rm -rf beanstalk-shell
+      # fi
       
       ##############################################
       ### Install packages depending on dotfiles ###
@@ -145,7 +146,7 @@ Vagrant.configure("2") do |config|
       vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
 
       # Install vim Coc extensions
-      vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
+      # vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
       
       ################################
       ### Set zsh as default shell ###
