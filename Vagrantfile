@@ -146,7 +146,7 @@ Vagrant.configure("2") do |config|
       vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
 
       # Install vim Coc extensions
-      # vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver coc-json coc-solargraph' +qall
+      # vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver' +qall
       
       ################################
       ### Set zsh as default shell ###
