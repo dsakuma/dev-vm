@@ -148,12 +148,17 @@ Vagrant.configure("2") do |config|
       # Install vim Coc extensions
       # vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver' +qall
       
-      ################################
-      ### Set zsh as default shell ###
-      ################################
+      ######################
+      ### Other settings ###
+      ######################
       
       # Use zsh as default shell
       sudo chsh vagrant --shell /bin/zsh
+  SHELL
+  
+  config.vm.provision "shell", privileged: true, inline: <<-SHELL
+      # Enable time synchronization
+      # timedatectl set-ntp on
   SHELL
 
   # Define VM
