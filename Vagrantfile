@@ -23,9 +23,9 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  config.vm.network "forwarded_port", guest: 80, host: 80
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 4040, host: 4040 # where the ngrok inspection interface is accessed
+  config.vm.network "forwarded_port", guest: 80, host: 80, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 4040, host: 4040, host_ip: "127.0.0.1" # ngrok inspection port
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "virtualbox" do |vb|
     vb.name = "dev-vm"
-    vb.memory = "5120"
+    vb.memory = "4096"
     vb.cpus = 1
   end
   # View the documentation for the provider you are using for more
@@ -66,27 +66,24 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
   config.vm.provision "file", source: "~/.aws", destination: "$HOME/.aws"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-      #####################
-      ### Link homesick ###
-      #####################
-
-      # Install ruby
-      sudo apt-get update && sudo apt-get install -y ruby
-      export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-
-      # Install homesick
-      gem install --user-install homesick
-
-      # Clone homesick castle
-      homesick clone dsakuma/dotfiles
-      homesick link dotfiles
-      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
-      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
 
       ########################
       ### Install packages ###
       ########################
-      
+      # Install packages
+      sudo apt-get update && sudo apt-get install -y \
+          autojump \
+          awscli \
+          build-essential \
+          nodejs \
+          npm \
+          python3-pip \
+          ruby \
+          ruby-dev \
+          silversearcher-ag \
+          tig \
+          zsh
+
       # Install docker
       [[ -f /usr/bin/docker ]] ||
         curl -fsSL https://get.docker.com | sh
@@ -97,19 +94,6 @@ Vagrant.configure("2") do |config|
         sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
       sudo chmod +x /usr/local/bin/docker-compose
 
-      # Install dependencies
-      sudo apt-get install -y \
-          autojump \
-          awscli \
-          build-essential \
-          nodejs \
-          npm \
-          python3-pip \
-          ruby-dev \
-          silversearcher-ag \
-          tig \
-          zsh
-
       # Install oh-my-zsh
       if [[ ! -d /home/vagrant/.oh-my-zsh ]]; then
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -118,8 +102,10 @@ Vagrant.configure("2") do |config|
       fi
 
       # Install gems
-      gem install --user-install rubocop --version='~>0.42.0'
-      gem install --user-install solargraph
+      gem install --user-install \
+          homesick \
+          rubocop:0.42.0 \
+          solargraph
 
       # Install vim-plug
       [[ -f ~/.vim/autoload/plug.vim ]] ||
@@ -127,11 +113,11 @@ Vagrant.configure("2") do |config|
           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
       # Install asdf
-      [[ -d ~/.asdf ]] ||
-        git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+      #  [[ -d ~/.asdf ]] ||
+      #    git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
       # Install pip packages 
-      pip3 install boto3
+      # pip3 install --user boto3
 
       # Install beanstalk-shell
       # if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
@@ -139,6 +125,19 @@ Vagrant.configure("2") do |config|
       #   sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
       #   rm -rf beanstalk-shell
       # fi
+
+      #####################
+      ### Link homesick ###
+      #####################
+
+      # Install ruby
+      # export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+
+      # Clone homesick castle
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
+      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
+      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
       
       ##############################################
       ### Install packages depending on dotfiles ###
