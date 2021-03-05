@@ -119,14 +119,6 @@ Vagrant.configure("2") do |config|
       # Install pip packages 
       # pip3 install --user boto3
 
-      # Install beanstalk-shell
-      # if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
-      #   ssh-agent bash -c 'ssh-add /somewhere/yourkey; git clone git@github.com:user/project.git'
-      #   GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
-      #   sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
-      #   rm -rf beanstalk-shell
-      # fi
-
       #####################
       ### Link homesick ###
       #####################
@@ -135,11 +127,13 @@ Vagrant.configure("2") do |config|
       # export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
       # Clone homesick castle
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
-      $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
-      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
-      git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
-      git --git-dir=$HOME/.homesick/repos/dotfiles/.git branch --set-upstream-to=origin/master master
+      if ! [[ -d /home/vagrant/.homesick/repos/dotfiles ]]; then
+        $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
+        $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
+        git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
+        git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
+        git --git-dir=$HOME/.homesick/repos/dotfiles/.git branch --set-upstream-to=origin/master master
+      fi
       
       ##############################################
       ### Install packages depending on dotfiles ###
