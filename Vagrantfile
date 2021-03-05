@@ -121,6 +121,7 @@ Vagrant.configure("2") do |config|
 
       # Install beanstalk-shell
       # if [[ ! -f /usr/local/bin/beanstalk-shell ]]; then
+      #   ssh-agent bash -c 'ssh-add /somewhere/yourkey; git clone git@github.com:user/project.git'
       #   GIT_SSH_COMMAND="ssh -i /home/vagrant/.ssh/id_rsa" git clone git@github.com:Vizir/beanstalk-shell.git
       #   sudo cp beanstalk-shell/beanstalk-shell /usr/local/bin/.
       #   rm -rf beanstalk-shell
