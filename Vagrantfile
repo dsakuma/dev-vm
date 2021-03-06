@@ -142,22 +142,17 @@ Vagrant.configure("2") do |config|
       # Install vim plugins
       vim -E -s -u "$HOME/.vimrc" +PlugInstall +qall
 
-      # Install vim Coc extensions
-      # vim -E -s -u "$HOME/.vimrc" +'CocInstall -sync coc-tsserver' +qall
-      
       ######################
       ### Other settings ###
       ######################
       
       # Use zsh as default shell
       sudo chsh vagrant --shell /bin/zsh
+      
+      # Set timezone
+      sudo timedatectl set-timezone America/Sao_Paulo
   SHELL
   
-  config.vm.provision "shell", privileged: true, inline: <<-SHELL
-      # Enable time synchronization
-      # timedatectl set-ntp on
-  SHELL
-
   # Define VM
   config.vm.define "dev-vm"
 
