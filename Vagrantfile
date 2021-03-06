@@ -101,6 +101,9 @@ Vagrant.configure("2") do |config|
         mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
       fi
 
+      # Add gem path to remove gem executables warning
+      PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+
       # Install gems
       gem install --user-install \
           homesick \
@@ -123,13 +126,10 @@ Vagrant.configure("2") do |config|
       ### Link homesick ###
       #####################
 
-      # Install ruby
-      # export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-
       # Clone homesick castle
       if ! [[ -d /home/vagrant/.homesick/repos/dotfiles ]]; then
-        $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick clone dsakuma/dotfiles
-        $(ruby -r rubygems -e 'puts Gem.user_dir')/bin/homesick link dotfiles
+        homesick clone dsakuma/dotfiles
+        homesick link dotfiles
         git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote remove origin
         git --git-dir=$HOME/.homesick/repos/dotfiles/.git remote add origin git@github.com:dsakuma/dotfiles.git
         git --git-dir=$HOME/.homesick/repos/dotfiles/.git branch --set-upstream-to=origin/master master
