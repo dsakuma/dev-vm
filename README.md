@@ -1,7 +1,7 @@
 ## Host
 
 ### Create a config.yaml
-Create a config.yaml based on config.yaml.template
+Create a `config.yaml` based on `config.yaml.template`
 
 ### Start vm
 ```
