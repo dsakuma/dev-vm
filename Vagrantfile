@@ -61,6 +61,8 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
+  puts "GITHUB_ACCESS_TOKEN: "
+  GITHUB_ACCESS_TOKEN = STDIN.noecho(&:gets).strip
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "$HOME/.ssh/id_rsa"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "$HOME/.ssh/id_rsa.pub"
   config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
@@ -119,8 +121,13 @@ Vagrant.configure("2") do |config|
       #  [[ -d ~/.asdf ]] ||
       #    git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
-      # Install pip packages 
-      # pip3 install --user boto3
+      # Install beanstalk-shell
+      if ! [[ -f /usr/local/bin/beanstalk-shell ]]; then
+        pip3 install --user boto3
+        git clone https://oauth2:#{GITHUB_ACCESS_TOKEN}@github.com/Vizir/beanstalk-shell.git /tmp/beanstalk-shell
+        sudo cp /tmp/beanstalk-shell/beanstalk-shell /usr/local/bin/.
+        rm -rf /tmp/beanstalk-shell
+      fi
 
       #####################
       ### Link homesick ###
