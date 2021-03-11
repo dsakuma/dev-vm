@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'yaml'
+
+current_dir    = File.dirname(File.expand_path(__FILE__))
+configs        = YAML.load_file("#{current_dir}/config.yaml")
+
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -23,9 +28,9 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  config.vm.network "forwarded_port", guest: 80, host: 80, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 4040, host: 4040, host_ip: "127.0.0.1" # ngrok inspection port
+  config.vm.network "forwarded_port", guest: 80, host: 80 #, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 8080, host: 8080 #, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 4040, host: 4040 #, host_ip: "127.0.0.1" # ngrok inspection port
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -61,13 +66,12 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  puts "GITHUB_ACCESS_TOKEN: "
-  GITHUB_ACCESS_TOKEN = STDIN.noecho(&:gets).strip
   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "$HOME/.ssh/id_rsa"
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "$HOME/.ssh/id_rsa.pub"
   config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
   config.vm.provision "file", source: "~/.aws", destination: "$HOME/.aws"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
+      echo #{configs['github_access_token']}
 
       ########################
       ### Install packages ###
@@ -124,7 +128,7 @@ Vagrant.configure("2") do |config|
       # Install beanstalk-shell
       if ! [[ -f /usr/local/bin/beanstalk-shell ]]; then
         pip3 install --user boto3
-        git clone https://oauth2:#{GITHUB_ACCESS_TOKEN}@github.com/Vizir/beanstalk-shell.git /tmp/beanstalk-shell
+        git clone https://oauth2:#{configs['github_access_token']}@github.com/Vizir/beanstalk-shell.git /tmp/beanstalk-shell
         sudo cp /tmp/beanstalk-shell/beanstalk-shell /usr/local/bin/.
         rm -rf /tmp/beanstalk-shell
       fi
