@@ -71,13 +71,13 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "~/.ssh/safeguard.pem", destination: "$HOME/.ssh/safeguard.pem"
   config.vm.provision "file", source: "~/.aws", destination: "$HOME/.aws"
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
-      echo #{configs['github_access_token']}
 
       ########################
       ### Install packages ###
       ########################
       # Install packages
-      sudo apt-get update && sudo apt-get install -y \
+      sudo apt-get update && sudo apt-get upgrade -y
+      sudo apt-get install -y \
           autojump \
           awscli \
           build-essential \
