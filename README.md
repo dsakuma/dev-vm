@@ -13,9 +13,6 @@ vagrant up
 vagrant ssh
 ```
 
-### Configure network adapter (optional)
-Use virtio-net for host-only adapter in VirtualBox for better performance
-
 ## Guest
 
 ### Add to ~/.ssh/config
