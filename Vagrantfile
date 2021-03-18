@@ -116,6 +116,9 @@ Vagrant.configure("2") do |config|
           rubocop:0.42.0 \
           solargraph
 
+      # Install pip packages
+      pip3 install --user awscli boto3
+
       # Install vim-plug
       [[ -f ~/.vim/autoload/plug.vim ]] ||
         curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
@@ -127,7 +130,6 @@ Vagrant.configure("2") do |config|
 
       # Install beanstalk-shell
       if ! [[ -f /usr/local/bin/beanstalk-shell ]]; then
-        pip3 install --user boto3
         git clone https://oauth2:#{configs['github_access_token']}@github.com/Vizir/beanstalk-shell.git /tmp/beanstalk-shell
         sudo cp /tmp/beanstalk-shell/beanstalk-shell /usr/local/bin/.
         rm -rf /tmp/beanstalk-shell
