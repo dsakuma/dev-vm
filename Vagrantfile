@@ -81,6 +81,7 @@ Vagrant.configure("2") do |config|
           autojump \
           awscli \
           build-essential \
+          libsqlite3-dev \
           nodejs \
           npm \
           python3-pip \
@@ -118,6 +119,9 @@ Vagrant.configure("2") do |config|
 
       # Install pip packages
       pip3 install --user awscli boto3
+
+      # Install npm packages
+      npm install --prefix ~/.npm-packages -g yarn
 
       # Install vim-plug
       [[ -f ~/.vim/autoload/plug.vim ]] ||
