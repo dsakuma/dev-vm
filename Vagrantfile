@@ -92,6 +92,21 @@ Vagrant.configure("2") do |config|
           tig \
           zsh
 
+      # Install latex packages
+      sudo apt-get install \
+          texlive-base \
+          texlive-latex-base \
+          texlive-fonts-recommended \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-extra \
+          texlive-bibtex-extra \
+          texlive-lang-portuguese \
+          texlive-lang-english \
+          lmodern \
+          biber \
+          latexmk
+
       # Install docker
       [[ -f /usr/bin/docker ]] ||
         curl -fsSL https://get.docker.com | sh
