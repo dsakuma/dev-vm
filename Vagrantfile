@@ -107,6 +107,11 @@ Vagrant.configure("2") do |config|
           biber \
           latexmk
 
+      # Install terraform
+      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+      sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+      sudo apt-get install terraform
+
       # Install docker
       [[ -f /usr/bin/docker ]] ||
         curl -fsSL https://get.docker.com | sh
@@ -125,7 +130,9 @@ Vagrant.configure("2") do |config|
       fi
 
       # Install zsh plugins
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+      if [[ ! -d /home/vagrant/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]]; then
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+      fi
 
       # Add gem path to remove gem executables warning
       PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
@@ -137,7 +144,7 @@ Vagrant.configure("2") do |config|
           solargraph
 
       # Install pip packages
-      pip3 install --user awscli boto3
+      pip3 install --user awscli boto3 ansible
 
       # Install npm packages
       npm install --prefix ~/.npm-packages -g yarn
