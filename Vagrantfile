@@ -108,7 +108,7 @@ Vagrant.configure("2") do |config|
           latexmk
 
       # Install terraform
-      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+      curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - 2>/dev/null
       sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
       sudo apt-get install terraform
 
