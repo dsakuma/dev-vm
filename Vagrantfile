@@ -126,8 +126,6 @@ Vagrant.configure("2") do |config|
       # Install oh-my-zsh
       if [[ ! -d /home/vagrant/.oh-my-zsh ]]; then
         sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        rm -f ~/.zshrc
-        mv ~/.zshrc.pre-oh-my-zsh ~/.zshrc
       fi
 
       # Install zsh plugins
