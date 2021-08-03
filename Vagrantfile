@@ -86,6 +86,7 @@ Vagrant.configure("2") do |config|
           libsqlite3-dev \
           nodejs \
           npm \
+          openjdk-16 \
           python3-pip \
           ruby \
           ruby-dev \
@@ -163,6 +164,9 @@ Vagrant.configure("2") do |config|
         sudo cp /tmp/beanstalk-shell/beanstalk-shell /usr/local/bin/.
         rm -rf /tmp/beanstalk-shell
       fi
+
+      # Install heroku
+      # curl https://cli-assets.heroku.com/install.sh | sh
 
       #####################
       ### Link homesick ###
