@@ -165,8 +165,9 @@ Vagrant.configure("2") do |config|
         rm -rf /tmp/beanstalk-shell
       fi
 
-      # Install heroku
-      # curl https://cli-assets.heroku.com/install.sh | sh
+      # Install Heroku cli
+      [[ -f /usr/local/bin/heroku ]] ||
+        curl https://cli-assets.heroku.com/install.sh | sh
 
       #####################
       ### Link homesick ###
