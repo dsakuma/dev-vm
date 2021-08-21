@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "virtualbox" do |vb|
     vb.name = "dev-vm"
-    vb.memory = "5120"
+    vb.memory = "6144"
     vb.cpus = 1
   end
   # View the documentation for the provider you are using for more
